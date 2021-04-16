@@ -1,131 +1,97 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vifontai <vifontai@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/14 12:28:34 by vifontai          #+#    #+#             */
-/*   Updated: 2021/04/14 16:51:52 by vifontai         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef CUB3D_H
-# define CUB3D_H
-
 #include "gnl/get_next_line.h"
-//#include "minilibx_macos/mlx.h"
 #include "libft/libft.h"
-#include <stdio.h>
+#include "minilibx_macos/mlx.h"
 #include <stdlib.h>
 #include <math.h>
 
-#define WIDTH 1200
-#define HEIGHT 800
-#define mapWidth 24
-#define mapHeight 24
-#define texWidth 64
-#define texHeight 64
 
-# define RED 0xFF0000
-# define GREEN 0x00FF00
-# define BLUE 0x0000FF
-# define WHITE 0xFFFFFF
-# define YELLOW 0xFFFF00
+#include <stdio.h>
 
-typedef struct  s_map_info {
-  int           widthscreen;
-  int           heightscreen;
-  int           all_param;
-}               t_map_info;
 
-typedef struct  s_mlx_img {
-   void         *image;
-	 void	  	    *ptr;
-   char         *addr;
-   int          bpp;
-   int          line_length;
-   int          endian;
-	 int    	 	  width;
-   int     	    height;
+
+
+
+#define path_flag 5
+
+typedef struct  s_texture {
+    void        *img_file;
+    char        *addr;
+    int         width;
+    int         height;      
+    int         bpp;
+    int         size_line;  
+    int         endian;
+}               t_texture;
+
+typedef struct  s_mlx_img 
+{
+    void        *image;
+    void        *ptr;
+    char        *addr;
+    int         bpp;
+    int         line_length;
+    int         endian;
+	int    	 	widthscreen;
+    int     	heightscreen;
 }               t_mlx_img;
 
-
-typedef struct	s_mlx {
-	void 		*ptr;
-	void		*win;
-	t_mlx_img		img;
-}				        t_mlx;
-
-typedef struct s_var {
-
-    double  posX;
-    double  posY;
-    double  dirX;
-    double  dirY;
-    double  planeX;
-    double  planeY;
-    double  perpWallDist;
-    double rayDirX;
-    double rayDirY;
-    int     key_forward;
-    int     key_left;
-    int     key_backward;
-    int     key_right;
-    int     color;
-    int     side;
-    int     lineheight;
-    int     text_num;
-    float   rayDirX0;
-    float   rayDirY0;
-    float   rayDirX1;
-    float   rayDirY1;
-    int     p;
-    float   posZ;
-    float   rowDistance;
-    float floorStepX;
-    float floorStepY;
-    float floorX;
-    float floorY;
-    //double movespeed;
-}               t_var;
-
-typedef struct s_text {
-  char *relative_path;
-  void  *img;
-  int   img_width;
-  int   img_height;
-  char *img_addr;
-  int   bpp;
-  int   length;
-  int   endian;
-}               t_text;
-
-typedef struct s_sprite 
+typedef struct  s_color_f_and_c
 {
-  double x;
-  double y;
-  int texture;
-}               t_sprite;  
+    int         r;
+    int         g;
+    int         b;
+    int         color;
+}               t_color;
 
-typedef struct 	s_cub3d {
-	t_mlx		    mlx;
-  t_map_info  map;	
-  t_var       var;	
-  t_sprite    spr;
-  t_text      text[5]; //nombre de texture que tu as 
-}				        t_cub3d;
+
+typedef struct t_texture_info
+{
+    t_texture   NO;
+    t_texture   SO;
+    t_texture   WE;
+    t_texture   EA;
+    t_texture   sprite;
+    t_color     col_ceil;
+    t_color     col_floor;
+}               t_txt_info;
+
+
+typedef struct s_mlx {
+    void        *ptr;
+    void        *win;
+    t_mlx_img   img;
+}               t_mlx;
+
+typedef struct  s_cub3d {
+    t_mlx       mlx;
+    t_txt_info  txt_info;  
+    int         all_param;   
+}               t_cube;
+
 
 /*
-** ft_error
+**  init folder
 */
-int   ft_err(t_cub3d *cub, char *error);
-void  free_all_and_exit(t_cub3d *cube);
 
 /*
-** init_resolution
+**  init_resolution
 */
-void  init_resolution(t_cub3d *cube, char *str);
+void    init_resolution(t_cube *cub, char *line);
+void    init_texture(t_cube *cube, t_texture *txt, char *line); 
+void    init_window(t_cube *cube);
+void    init_color(t_cube *cube, char *line, t_color *color);
+void    init_map(t_cube *cube, char *str);
 
+// void    init_texture(t_cub *cube, char *texture, char *line);
 
-#endif
+/*
+**  main.c
+*/
+
+void     check_info(t_cube *cub, char *str);
+
+/*
+**  ft_err.c
+*/
+
+int     ft_err(t_cube *cub, char *error);
