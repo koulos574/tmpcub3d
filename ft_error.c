@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int     ft_err(t_cub3d *cube, char *error)
+int     ft_err(t_cube *cube, char *error)
 {
     ft_putstr_fd("Error\n", 2);
     ft_putstr_fd(error, 2);
@@ -8,7 +8,7 @@ int     ft_err(t_cub3d *cube, char *error)
     return (/*freemoncube*/0);
 }
 
-void    free_all_and_exit(t_cub3d *cube)
+void    free_all_and_exit(t_cube *cube)
 {
     exit(1); 
     /*
